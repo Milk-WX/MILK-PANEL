@@ -1,4 +1,4 @@
-# Milk Platform Personal Edition
+# Milk Platform Personal Edition Milk平台个人版
 
 Milk Platform 是面向个人实验环境和已授权服务器的 Xray 多节点配置管理平台。
 
