@@ -13,6 +13,16 @@ NEUXS_MASTER_AGENT_GITHUB_REF=main
 
 Then create an Agent installer in the Milk web panel and copy its generated command. The command uses `MILKPANEL=1 INSTALL_XRAY=1` and the one-time Master URL; no GitHub token is exposed to the Agent.
 
+## Fixed Master install
+
+For a new amd64 Master VPS:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Milk-WX/MILK-PANEL/main/install-milkpanel.sh | sudo env MILKPANEL=1 bash
+```
+
+The bootstrap verifies `SHA256SUMS`, installs the Master package, asks for the administrator username, and prints a generated password once.
+
 ## Master SSH management
 
 After installing the Master package, run `sudo milk` on the VPS:
