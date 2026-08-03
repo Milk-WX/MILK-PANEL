@@ -19,6 +19,8 @@ Milk Platform 是面向个人实验环境和已授权服务器的 Xray 多节点
 11. TG通知：主机离线通知、流量查询反馈、客户端到期通知、客户端流量警告。
 > 本项目只面向个人自有或已获授权的服务器环境。
 
+演示站：https://panel.z7777.dpdns.org/test
+
 ## 一条命令安装 Master
 
 Linux amd64 VPS 执行：
