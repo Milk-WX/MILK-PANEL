@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+# Milk Master SSH management menu.
+# This command only manages the Milk Master service and binary; state and env
+# files are intentionally preserved during upgrade/uninstall.
+set -u
+
+SERVICE_NAME="${MILK_SERVICE_NAME:-milk-master}"
+BIN_PATH="${MILK_BIN_PATH:-/usr/local/bin/milk-master}"
+SERVICE_PATH="${MILK_SERVICE_PATH:-/etc/systemd/system/${SERVICE_NAME}.service}"
+CONFIG_DIR="${MILK_CONFIG_DIR:-/etc/neuxs-agent}"
+ENV_PATH="${MILK_ENV_PATH:-$CONFIG_DIR/milk.env}"
+REPOSITORY="${MILK_GITHUB_REPOSITORY:-Milk-WX/MILK-PANEL}"
+REF="${MILK_GITHUB_REF:-main}"
+UPGRADE_TMP=""
+
+cleanup() {
+  [[ -z "$UPGRADE_TMP" ]] || rm -f -- "$UPGRADE_TMP"
+}
+trap cleanup EXIT
+
+if [[ -f "$ENV_PATH" ]]; then
+  # shellcheck disable=SC1090
+  . "$ENV_PATH"
+  REPOSITORY="${MILK_GITHUB_REPOSITORY:-$REPOSITORY}"
+  REF="${MILK_GITHUB_REF:-$REF}"
+fi
+
+die() {
+  echo "错误: $*" >&2
+  exit 1
+}
+
+require_root() {
+  [[ "$(id -u)" -eq 0 ]] || die "请使用 root 或 sudo 执行 milk"
+}
+
+download() {
+  local url="$1" output="$2"
+  if command -v curl >/dev/null 2>&1; then
+    curl -fL --retry 2 --connect-timeout 10 "$url" -o "$output"
+  elif command -v wget >/dev/null 2>&1; then
+    wget -qO "$output" "$url"
+  else
+    die "需要 curl 或 wget"
+  fi
+}
+
+binary_asset() {
+  case "$(uname -m)" in
+    x86_64|amd64) echo "milk-master-linux-amd64" ;;
+    aarch64|arm64) echo "milk-master-linux-arm64" ;;
+    *) die "暂不支持的 CPU 架构: $(uname -m)" ;;
+  esac
+}
+
+upgrade_panel() {
+  require_root
+  local asset url tmp kind
+  asset="$(binary_asset)"
+  url="https://raw.githubusercontent.com/${REPOSITORY}/${REF}/${asset}"
+  tmp="$(mktemp)"
+  UPGRADE_TMP="$tmp"
+  echo "下载: $url"
+  download "$url" "$tmp" || die "下载失败，请检查 GitHub 仓库、分支和网络"
+  [[ -s "$tmp" ]] || die "下载文件为空"
+  if command -v file >/dev/null 2>&1; then
+    kind="$(file -b "$tmp" || true)"
+    echo "$kind" | grep -qi ELF || die "下载的文件不是 Linux ELF 二进制"
+  else
+    [[ "$(head -c 4 "$tmp" | od -An -tx1 | tr -d ' \n')" == "7f454c46" ]] || die "ELF 文件校验失败"
+  fi
+  systemctl stop "$SERVICE_NAME" 2>/dev/null || true
+  install -m 0755 "$tmp" "$BIN_PATH"
+  systemctl daemon-reload
+  systemctl start "$SERVICE_NAME"
+  systemctl is-active --quiet "$SERVICE_NAME" || die "面板启动失败，请执行 journalctl -u $SERVICE_NAME -n 80 --no-pager"
+  rm -f -- "$tmp"
+  UPGRADE_TMP=""
+  echo "面板升级完成: $BIN_PATH"
+  systemctl --no-pager --full status "$SERVICE_NAME" || true
+}
+
+uninstall_panel() {
+  require_root
+  echo "将停止并删除 Milk Master 程序与 systemd 服务。"
+  echo "配置、状态和日志会保留，备份请到面板内部下载。"
+  printf '确认卸载请输入 UNINSTALL: '
+  local answer
+  read -r answer || true
+  [[ "$answer" == "UNINSTALL" ]] || { echo "已取消"; return 0; }
+  systemctl disable --now "$SERVICE_NAME" 2>/dev/null || true
+  rm -f -- "$SERVICE_PATH" "$BIN_PATH" "/usr/local/bin/milk"
+  systemctl daemon-reload 2>/dev/null || true
+  systemctl reset-failed "$SERVICE_NAME" 2>/dev/null || true
+  echo "Milk Master 已卸载。"
+  echo "保留目录: $CONFIG_DIR、/var/lib/neuxs-agent/master"
+}
+
+show_menu() {
+  clear 2>/dev/null || true
+  echo "================================"
+  echo "        Milk Panel 管理面板"
+  echo "================================"
+  echo "1. 升级面板"
+  echo "2. 卸载面板"
+  echo "0. 退出"
+  echo "--------------------------------"
+  echo "说明：备份请到面板内部下载备份文件。"
+}
+
+main() {
+  require_root
+  while true; do
+    show_menu
+    printf '请选择: '
+    local choice
+    read -r choice || exit 0
+    case "$choice" in
+      1) upgrade_panel; printf '\n按回车返回菜单...'; read -r _ || true ;;
+      2) uninstall_panel; printf '\n按回车退出...'; read -r _ || true; exit 0 ;;
+      0) exit 0 ;;
+      *) echo "无效选项"; sleep 1 ;;
+    esac
+  done
+}
+
+main "$@"

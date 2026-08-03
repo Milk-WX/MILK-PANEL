@@ -1,6 +1,10 @@
-e7ac6ee3530f14f1d479b1a9db62f5e64f23d2c1bc09b4d301b66017bc1f15cd  milk-agent-linux-amd64
-52acd15d97f5cdb8b2584573538a0ed86186f53fe7db141fd61bbfdbc669fb73  milk-agent-linux-arm64
-25dde0ab69613e8b1603410f846d1e8a9ec2a454b9c6415b3d3a70afc0c66e0e  milk-master-linux-amd64
-5551202afe6b6162c3032fe3013b8262014934edb5a03e36b4c6a108b47db5b2  milk-master-linux-arm64
-ee8179f6bb440e77a5bbc582bed5957d9f872beab84873d6b92eae6e8b4659c9  milk-personal-linux-amd64.tar.gz
-608c3a20ea715a1484d7f786548d86f64eb9b6c0f1400de49ce0ca7423cd988b  milk-personal-linux-amd64.zip
+@{Algorithm=SHA256; Hash=3586D56BC3A5F78EF155F04A74ED638E45F49F827BAF7D9094A7D9A70437AD75; Path=C:\Users\Administrator\Documents\???\???????\???\github-release\install-milkpanel.sh}.Hash.ToLower()  install-milkpanel.sh
+@{Algorithm=SHA256; Hash=A5E116A5E87E940A16667D38F48BB260F62CC916E4B72C2FF3B1545FC84410A8; Path=C:\Users\Administrator\Documents\???\???????\???\github-release\milk}.Hash.ToLower()  milk
+@{Algorithm=SHA256; Hash=D8AAEF47B5E782D538ABF0F5958B910EEF69D073AB77C7D11DF500FE8C0AB0CE; Path=C:\Users\Administrator\Documents\???\???????\???\github-release\milk-agent-linux-amd64}.Hash.ToLower()  milk-agent-linux-amd64
+@{Algorithm=SHA256; Hash=8E40AEBA503E42E5DF90660FC97FC5923814C6E948D01B37B2C894C42406D7E7; Path=C:\Users\Administrator\Documents\???\???????\???\github-release\milk-agent-linux-arm64}.Hash.ToLower()  milk-agent-linux-arm64
+@{Algorithm=SHA256; Hash=9FB83BE04A30EC1BB47B8D51574C79B26110FB079B4CADBEBEE889027BB47CFD; Path=C:\Users\Administrator\Documents\???\???????\???\github-release\milk-master-linux-amd64}.Hash.ToLower()  milk-master-linux-amd64
+@{Algorithm=SHA256; Hash=D96B8768B6F2E6A0C365AD375322C3A8B978EFF33BB39F4236A54ADB90877DD4; Path=C:\Users\Administrator\Documents\???\???????\???\github-release\milk-master-linux-arm64}.Hash.ToLower()  milk-master-linux-arm64
+@{Algorithm=SHA256; Hash=F35ABE2E43592C2F734C6129DB116D9935727F353965C232F7E83A00F9C3FD14; Path=C:\Users\Administrator\Documents\???\???????\???\github-release\milk-personal-linux-amd64.tar.gz}.Hash.ToLower()  milk-personal-linux-amd64.tar.gz
+@{Algorithm=SHA256; Hash=EDB6645C1FA2083329D4DE974691315985162AB8644DE93011EC2C65204753C1; Path=C:\Users\Administrator\Documents\???\???????\???\github-release\milk-personal-linux-amd64.zip}.Hash.ToLower()  milk-personal-linux-amd64.zip
+@{Algorithm=SHA256; Hash=395793CCA2CCAA190FADA11EB0A47DEBF161B60ECB58E515B8F1ED9501816588; Path=C:\Users\Administrator\Documents\???\???????\???\github-release\milk-personal-linux-arm64.tar.gz}.Hash.ToLower()  milk-personal-linux-arm64.tar.gz
+@{Algorithm=SHA256; Hash=8DB87DE5383F851C27B07A31588376847FA314C47148D82844BE528E62336A6F; Path=C:\Users\Administrator\Documents\???\???????\???\github-release\milk-personal-linux-arm64.zip}.Hash.ToLower()  milk-personal-linux-arm64.zip
