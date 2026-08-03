@@ -8,7 +8,11 @@ ARCHIVE="${MILK_RELEASE_ARCHIVE:-milk-personal-linux-amd64.tar.gz}"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TMP_DIR"' EXIT
 
-die() { echo "error: $*" >&2; exit 1; }
+die() {
+  echo "error: $*" >&2
+  exit 1
+}
+
 [[ "$(id -u)" -eq 0 ]] || die "run with sudo or as root"
 
 download() {
@@ -29,15 +33,17 @@ esac
 
 BASE_URL="https://raw.githubusercontent.com/${REPOSITORY}/${REF}"
 ARCHIVE_PATH="$TMP_DIR/$ARCHIVE"
+SUMS_PATH="$TMP_DIR/SHA256SUMS"
 download "$BASE_URL/$ARCHIVE" "$ARCHIVE_PATH"
-download "$BASE_URL/SHA256SUMS" "$TMP_DIR/SHA256SUMS"
+download "$BASE_URL/SHA256SUMS" "$SUMS_PATH"
+
 if command -v sha256sum >/dev/null 2>&1; then
   (cd "$TMP_DIR" && grep "  $ARCHIVE$" SHA256SUMS | sha256sum -c -)
 fi
 
 tar -xzf "$ARCHIVE_PATH" -C "$TMP_DIR"
 PACKAGE_DIR="$TMP_DIR/milk-personal-linux-amd64"
-[[ -f "$PACKAGE_DIR/install-master.sh" ]] || die "release archive is missing install-master.sh"
+[[ -x "$PACKAGE_DIR/install-master.sh" || -f "$PACKAGE_DIR/install-master.sh" ]] || die "release archive is missing install-master.sh"
 cd "$PACKAGE_DIR"
 chmod +x install-master.sh
 exec ./install-master.sh ./milk-master
