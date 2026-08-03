@@ -25,7 +25,7 @@ Linux amd64 VPS 执行：
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Milk-WX/MILK-PANEL/main/install-milkpanel.sh | sudo env MILKPANEL=1 bash
-
+```
 安装器会自动完成：
 
 1. 下载并校验 `SHA256SUMS`。
