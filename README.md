@@ -33,7 +33,7 @@ curl -fsSL https://raw.githubusercontent.com/Milk-WX/MILK-PANEL/main/install-mil
 1. 下载并校验 `SHA256SUMS`。
 2. 安装 `milk-master.service`。
 3. 询问管理员用户名。
-4. 生成长随机管理员密码，并在首次安装完成时打印一次。
+4. 生成长随机管理员密码，并在首次安装完成时高亮打印面板地址、管理员用户名和初始密码。
 5. 安装 SSH 管理命令 `milk`。
 
 安装完成后打开：
@@ -60,7 +60,7 @@ sudo milk
 0. 退出
 ```
 
-卸载需要输入 `UNINSTALL` 二次确认；配置、状态和日志会保留。备份请在网页面板内下载 `state.json`。
+卸载需要输入 `UNINSTALL` 二次确认；会删除 Master 配置、管理员凭据、状态数据库、日志和发布缓存，重新安装会生成新的管理员密码。接管备份目录会保留，便于必要时恢复。备份请在网页面板内下载 `state.json`。
 
 ## 接入 Agent 节点
 
